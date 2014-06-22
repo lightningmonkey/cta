@@ -8,6 +8,6 @@ if __name__=='__main__':
     cta_data = GetCTADataParser(r'C:\Users\brian\Desktop\data\ridership.csv', weather_data.weather_data_map)
     station_list = cta_data.station_data_map['Jackson/State']
     stat = Stats(station_list)
-    #pprint.pprint(data.station_data['Belmont-North Main'])
+    pprint.pprint(data.station_data['Belmont-North Main'])
     #print("num: {0}".format(len(data.station_data['Southport'])))
     
