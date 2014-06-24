@@ -1,6 +1,7 @@
 import urllib2
 import json
 import datetime
+import pickle
 
 class WeatherData(object):
     def __init__(self):
@@ -10,16 +11,19 @@ class WeatherData(object):
         self.snow_fall = 0
         self.rain = False
         self.snow = False
+        self.date = datetime.datetime
 
     def __str__(self):
-        return "temp:{0} rain:{1} rain_fall:{2} snow:{3} snow_depth:{4} snow_fall:{5}".format(self.temp, self.rain,
+        return "temp:{0} rain:{1} rain_fall:{2} snow:{3} snow_depth:{4} snow_fall:{5} date:{6}".format(self.temp, self.rain,
                                                                                               self.rain_fall, self.snow,
-                                                                                              self.snow_depth, self.snow_fall)
+                                                                                              self.snow_depth, self.snow_fall,
+                                                                                              self.date)
 
     def __repr__(self):
-        return "temp:{0} rain:{1} rain_fall:{2} snow:{3} snow_depth:{4} snow_fall:{5}".format(self.temp, self.rain,
+        return "temp:{0} rain:{1} rain_fall:{2} snow:{3} snow_depth:{4} snow_fall:{5} date:{6}".format(self.temp, self.rain,
                                                                                               self.rain_fall, self.snow,
-                                                                                              self.snow_depth, self.snow_fall)
+                                                                                              self.snow_depth, self.snow_fall,
+                                                                                              self.date)
 
 class WeatherUnderground(object):
     def __init__(self):
@@ -32,11 +36,11 @@ class WeatherUnderground(object):
             output = -1
         return output
 
-    def run(self, search_day):
+    def run(self, search_day, array):
         cur_search = self.api_url.format(search_day.strftime("%Y%m%d"))
-        f = urllib2.urlopen(cur_search)
+        url = urllib2.urlopen(cur_search)
 
-        json_string = f.read()
+        json_string = url.read()
         parsed_json = json.loads(json_string)
         weather_data = WeatherData()
 
@@ -46,14 +50,26 @@ class WeatherUnderground(object):
         weather_data.snow_fall = self.get_val(parsed_json[u'history'][u'dailysummary'][0][u'snowfalli'])
         weather_data.rain = True if parsed_json[u'history'][u'dailysummary'][0][u'rain'] == "1" else False
         weather_data.snow = True if parsed_json[u'history'][u'dailysummary'][0][u'snow'] == "1" else False
+        weather_data.date = search_day
 
         print weather_data
-        f.close()
+        url.close()
+        array.append(weather_data)
 
 if __name__=='__main__':
     w = WeatherUnderground()
     d = datetime.datetime(year=2010, month=01, day=02)
+    data = []
+    for x in range(1,30):
+        d = datetime.datetime(year=2010, month=01, day=x)
+        w.run(d, data)
 
-    w.run(d)
-    #for x in range(1,30):
-    #    w.run(2014, 01, x)
+    f = open("jan_2010", "w")
+    pickle.dump(data, f)
+    f.close()
+    print data
+
+    #data = []
+    #f = open("pickle", "r")
+    #data = pickle.load(f)
+    #print data

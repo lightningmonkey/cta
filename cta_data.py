@@ -1,19 +1,20 @@
 import urllib2
 import json
 import datetime
-
+import pprint
 
 class CTAData(object):
     def __init__(self):
         self.station = ""
         self.rides = 0
         self.daytype = ""
+        self.date = datetime
 
     def __str__(self):
-        return "rides:{0} station:{1} type:{2}".format(self.rides, self.station, self.daytype)
+        return "rides:{0} station:{1} type:{2} day:{3}".format(self.rides, self.station, self.daytype, self.date)
 
     def __repr__(self):
-        return "rides:{0} station:{1} type:{2}".format(self.rides, self.station, self.daytype)
+        return "rides:{0} station:{1} type:{2} day:{3}".format(self.rides, self.station, self.daytype, self.date)
 
 class CTA(object):
     def run(self, date):
@@ -24,9 +25,15 @@ class CTA(object):
         cta_data.station = parsed_json[0][u'stationname']
         cta_data.rides = parsed_json[0][u'rides']
         cta_data.daytype = parsed_json[0][u'daytype']
-        print cta_data
+        cta_data.date = date
+        return cta_data
 
 if __name__=='__main__':
     d = datetime.datetime(year=2013, month=05, day=10)
     c = CTA()
-    c.run(d)
+    cta_data = []
+    for x in range(1,30):
+        d = datetime.datetime(year=2010, month=01, day=x)
+        c.run(d, cta_data)
+
+    pprint.pprint(cta_data)
