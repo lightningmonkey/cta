@@ -1,4 +1,4 @@
 cta
 ====
 
-see if there is a realtionship between weather and cta ridership
+See if there is a realtionship between weather and cta ridership
