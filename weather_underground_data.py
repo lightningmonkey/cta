@@ -58,13 +58,12 @@ class WeatherUnderground(object):
 
 if __name__=='__main__':
     w = WeatherUnderground()
-    d = datetime.datetime(year=2010, month=01, day=02)
     data = []
     for x in range(1,30):
-        d = datetime.datetime(year=2010, month=01, day=x)
+        d = datetime.datetime(year=2009, month=03, day=x)
         w.run(d, data)
 
-    f = open("jan_2010", "w")
+    f = open("mar_2009", "w")
     pickle.dump(data, f)
     f.close()
     print data

@@ -2,6 +2,7 @@ from weather_underground_data import WeatherData
 from cta_data import CTAData, CTA
 from pickle_stuff import PickleStuff
 import pprint
+import pickle
 
 class CombinedData(object):
     def __init__(self, weather, cta):
@@ -29,6 +30,9 @@ class Combine(object):
             self.combined_data.append(combined)
 
         pprint.pprint(self.combined_data)
+        f = open("combined", "w")
+        pickle.dump(self.combined_data, f)
+        f.close()
 
 if __name__=='__main__':
     c = Combine()
